@@ -8,7 +8,7 @@ public record RegisterRequest(
     [Required, MaxLength(100)] string LastName,
     [Required, EmailAddress] string Email,
     [Required, MinLength(8)] string Password,
-    [Required] string Role);
+    [Required] string Role, string? ProfileImageUrl = null);
 
 public record LoginRequest(
     [Required, EmailAddress] string Email,
@@ -31,7 +31,7 @@ public record EventRequest(
 
 public record EventResponse(
     int Id, string Name, string Description, DateTime Date, string Location,
-    double DistanceKm, EventType EventType, int OrganiserId);
+    double DistanceKm, EventType EventType, int OrganiserId, string? BannerImageUrl = null);
 
 public record CategoryRequest([Required, MaxLength(100)] string Name);
 
