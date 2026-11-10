@@ -25,6 +25,7 @@ public class User
     [Required, MaxLength(200)] public string Email { get; set; } = "";
     [Required] public string PasswordHash { get; set; } = "";
     [Required, MaxLength(20)] public string Role { get; set; } = Roles.Participant;
+    [MaxLength(500)] public string? ProfileImageBlobName { get; set; }
 }
 
 public class Event
@@ -39,6 +40,7 @@ public class Event
     public int OrganiserId { get; set; }
     public User? Organiser { get; set; }
     public List<Category> Categories { get; set; } = new();
+    [MaxLength(500)] public string? BannerBlobName { get; set; }
 }
 
 public class Category
