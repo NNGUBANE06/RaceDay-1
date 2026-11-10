@@ -1,0 +1,2 @@
+@model List<ResultViewModel>
+@{ViewData["Title"]="My results";}<h1>My results</h1>@if(Model.Count==0){<p class="text-muted">No results have been published for you yet.</p>}<table class="table table-striped"><thead><tr><th>Event</th><th>Position</th><th>Finish time</th></tr></thead><tbody>@foreach(var r in Model){<tr><td>@r.EventName</td><td><span class="badge bg-success">@r.Position</span></td><td>@r.FinishTime</td></tr>}</tbody></table>
