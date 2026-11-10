@@ -8,13 +8,13 @@ public record RegisterRequest(
     [Required, MaxLength(100)] string LastName,
     [Required, EmailAddress] string Email,
     [Required, MinLength(8)] string Password,
-    [Required] string Role, string? ProfileImageUrl = null);
+    [Required] string Role);
 
 public record LoginRequest(
     [Required, EmailAddress] string Email,
     [Required] string Password);
 
-public record ProfileResponse(int Id, string FirstName, string LastName, string Email, string Role);
+public record ProfileResponse(int Id, string FirstName, string LastName, string Email, string Role, string? ProfileImageUrl = null);
 
 public record UpdateProfileRequest(
     [Required, MaxLength(100)] string FirstName,
