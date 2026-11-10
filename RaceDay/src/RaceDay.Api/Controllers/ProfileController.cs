@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RaceDay.Api.Data;
 using RaceDay.Api.Dtos;
 using RaceDay.Api.Models;
+using RaceDay.Api.Services;
 
 namespace RaceDay.Api.Controllers;
 
@@ -14,11 +15,13 @@ public class ProfileController : ApiControllerBase
 {
     private readonly AppDbContext _db;
     private readonly IPasswordHasher<User> _hasher;
+    private readonly BlobStorageService _blobs;
 
-    public ProfileController(AppDbContext db, IPasswordHasher<User> hasher)
+    public ProfileController(AppDbContext db, IPasswordHasher<User> hasher, BlobStorageService blobs)
     {
         _db = db;
         _hasher = hasher;
+        _blobs = blobs;
     }
 
     /// <summary>View your own profile (Organiser or Participant).</summary>
@@ -31,7 +34,7 @@ public class ProfileController : ApiControllerBase
     {
         var user = await _db.Users.FindAsync(CurrentUserId);
         if (user == null) return NotFound();
-        return Ok(new ProfileResponse(user.Id, user.FirstName, user.LastName, user.Email, user.Role));
+        return Ok(new ProfileResponse(user.Id, user.FirstName, user.LastName, user.Email, user.Role, _blobs.GetReadUrl(user.ProfileImageBlobName, "profile")));
     }
 
     /// <summary>Update your own first name, last name and (optionally) password.</summary>
