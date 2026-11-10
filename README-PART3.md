@@ -35,8 +35,20 @@ Start the API separately and make sure it is reachable from the container. On Do
 - Profile view and update.
 - Dockerfile and GitHub Actions build workflow.
 
-## Remaining integration work / validation
-- Azure Blob Storage image upload and display must be added to the Part 2 API first; MVC must only call API upload endpoints and must not access Azure directly. No Blob upload endpoint was present in the Part 2 API when this MVC starter was assembled.
-- Verify the API cookie name and cookie forwarding in a running local environment.
-- Run the API and MVC together, complete end-to-end tests, and update screenshots/demo video links before submission.
-- The sample MVC project currently expects the API to be available at the configured URL. Set `RaceDayApi:BaseUrl` or the `RaceDayApi__BaseUrl` environment variable to match your environment.
+## Azure Blob Storage setup (image uploads)
+Image uploads are implemented in the Part 2 API. MVC sends multipart uploads to the API; only the API communicates with Azure. Event banners and profile pictures use separate private containers, and the API returns short-lived read-only SAS URLs for display.
+
+1. Create an Azure Storage Account in Azure Portal.
+2. Open **Storage account → Security + networking → Access keys** and copy a connection string.
+3. Set the connection string as an environment variable for the API (do not commit it):
+   - PowerShell: `$env:AzureBlobStorage__ConnectionString="YOUR_CONNECTION_STRING"`
+   - Bash: `export AzureBlobStorage__ConnectionString="YOUR_CONNECTION_STRING"`
+4. Optional container names: `AzureBlobStorage__EventContainer` (default `event-banners`) and `AzureBlobStorage__ProfileContainer` (default `profile-images`). The API creates the containers as private containers on first upload.
+5. Apply `RaceDay/src/RaceDay.Api/Database/20261110_AddBlobImageNames.sql` to the RaceDay database before using uploads. It adds nullable blob-name columns to Events and Users.
+6. Start the API with the environment variable set, then start MVC. Organisers can upload an event banner on create/edit; users can upload a profile picture on the profile edit page.
+
+Allowed image formats are JPEG, PNG and WebP; maximum file size is 5 MB. Keep the connection string out of GitHub, screenshots and chat. An example non-secret configuration shape is in `RaceDay/src/RaceDay.Api/appsettings.Azure.example.json`.
+
+## Remaining work
+- Run the API and MVC together and complete end-to-end validation locally.
+- Record the demonstration video and add its link before submission.
