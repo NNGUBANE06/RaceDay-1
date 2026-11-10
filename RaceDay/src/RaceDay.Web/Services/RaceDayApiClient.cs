@@ -27,6 +27,15 @@ public sealed class RaceDayApiClient
         return await response.Content.ReadFromJsonAsync<T>(Json);
     }
 
+    public async Task<T?> Post<T>(string path, object body)
+    {
+        using var request = CreateRequest(HttpMethod.Post, path);
+        request.Content = new StringContent(JsonSerializer.Serialize(body, Json), Encoding.UTF8, "application/json");
+        using var response = await _http.SendAsync(request);
+        if (!response.IsSuccessStatusCode) return default;
+        return await response.Content.ReadFromJsonAsync<T>(Json);
+    }
+
     public async Task<(bool Ok, string? Error)> Send(string path, HttpMethod method, object? body = null, bool saveCookie = false)
     {
         using var request = CreateRequest(method, path);
