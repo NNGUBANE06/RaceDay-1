@@ -1,0 +1,20 @@
+name: RaceDay build
+on:
+  push:
+    branches: [ master, part-3-mvc-implementation ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Build API
+        run: dotnet build RaceDay/src/RaceDay.Api/RaceDay.Api.csproj --configuration Release
+      - name: Build MVC
+        run: dotnet build RaceDay/src/RaceDay.Web/RaceDay.Web.csproj --configuration Release
+      - name: Run API tests
+        run: dotnet test RaceDay/src/RaceDay.Tests/RaceDay.Tests.csproj --configuration Release --no-build
