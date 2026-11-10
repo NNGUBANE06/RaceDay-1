@@ -1,0 +1,6 @@
+:root { --race-blue: #173b68; }
+body { background: #f5f7fb; min-height: 100vh; }
+.hero { background: linear-gradient(120deg, #173b68, #267c9b); }
+.card { border: 0; border-radius: 1rem; }
+.stat-card { border-left: 4px solid var(--race-blue); }
+footer { font-size: .9rem; }
