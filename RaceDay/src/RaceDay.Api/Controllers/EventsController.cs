@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RaceDay.Api.Data;
 using RaceDay.Api.Dtos;
 using RaceDay.Api.Models;
+using RaceDay.Api.Services;
 
 namespace RaceDay.Api.Controllers;
 
@@ -13,11 +14,12 @@ namespace RaceDay.Api.Controllers;
 public class EventsController : ApiControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly BlobStorageService _blobs;
 
-    public EventsController(AppDbContext db) => _db = db;
+    public EventsController(AppDbContext db, BlobStorageService blobs) { _db = db; _blobs = blobs; }
 
-    private static EventResponse ToDto(Event e) =>
-        new(e.Id, e.Name, e.Description, e.Date, e.Location, e.DistanceKm, e.EventType, e.OrganiserId);
+    private EventResponse ToDto(Event e) =>
+        new(e.Id, e.Name, e.Description, e.Date, e.Location, e.DistanceKm, e.EventType, e.OrganiserId, _blobs.GetReadUrl(e.BannerBlobName, "event"));
 
     /// <summary>List all events (both roles).</summary>
     /// <response code="200">All events ordered by date.</response>
