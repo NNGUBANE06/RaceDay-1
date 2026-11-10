@@ -17,4 +17,4 @@ jobs:
       - name: Build MVC
         run: dotnet build RaceDay/src/RaceDay.Web/RaceDay.Web.csproj --configuration Release
       - name: Run API tests
-        run: dotnet test RaceDay/src/RaceDay.Tests/RaceDay.Tests.csproj --configuration Release --no-build
+        run: dotnet test RaceDay/src/RaceDay.Tests/RaceDay.Tests.csproj --configuration Release
