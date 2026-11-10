@@ -39,18 +39,10 @@ public sealed class BlobStorageService
         var containerName = kind == "event" ? _eventContainer : _profileContainer;
         var service = new BlobServiceClient(_connectionString);
         var blob = service.GetBlobContainerClient(containerName).GetBlobClient(blobName);
-        var credential = new Azure.Storage.StorageSharedKeyCredential(
-            BlobConnectionStringValue("AccountName"), BlobConnectionStringValue("AccountKey"));
-        if (!blob.CanGenerateSasUri) return blob.Uri.ToString();
+        if (!blob.CanGenerateSasUri) return null;
         var sas = new BlobSasBuilder { BlobContainerName = containerName, BlobName = blobName, Resource = "b", ExpiresOn = DateTimeOffset.UtcNow.AddHours(2) };
         sas.SetPermissions(BlobSasPermissions.Read);
         return blob.GenerateSasUri(sas).ToString();
     }
 
-    private string BlobConnectionStringValue(string key)
-    {
-        var pair = _connectionString.Split(';', StringSplitOptions.RemoveEmptyEntries)
-            .FirstOrDefault(x => x.StartsWith(key + "=", StringComparison.OrdinalIgnoreCase));
-        return pair is null ? "" : pair[(pair.IndexOf('=') + 1)..];
-    }
 }
